@@ -1,6 +1,7 @@
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -57,13 +58,11 @@ public class Node
                 if (idInLine.equals(inputParameter))
                 {
                     neighbours[numberOfNeighbours] = Integer.parseInt(lastIdInLine);
-                    System.out.println(numberOfNeighbours + ". Nachbar " + neighbours[numberOfNeighbours]);
                     numberOfNeighbours++;
                 }
                 else if (lastIdInLine.equals(inputParameter))
                 {
                     neighbours[numberOfNeighbours] = Integer.parseInt(idInLine);
-                    System.out.println(numberOfNeighbours + ". Nachbar " + neighbours[numberOfNeighbours]);
                     numberOfNeighbours++;
                 }
             }
@@ -193,6 +192,7 @@ public class Node
                     if (server != null)
                     {
                         server.close();
+                        socket.close();
                         run = false;
                     }
                 }
@@ -237,6 +237,10 @@ public class Node
         catch(UnknownHostException uhe)
         {
             System.err.println("Host ist unbekannt: " + uhe);
+        }
+        catch (SocketException sc)
+        {
+            System.err.println("Knoten ist bereits geschlossen: " + sc);
         }
         catch (IOException ioe)
         {
