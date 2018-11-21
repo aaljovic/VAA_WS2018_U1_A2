@@ -1,12 +1,9 @@
 import java.io.*;
-import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-
-
 
 
 public class Node
@@ -17,7 +14,6 @@ public class Node
         {
             Node node = read(args[0]);
             node.setNeighbours(readForNeighbours(Integer.toString(node.id)));
-            //node.setRandomNeighbours();
             node.showNeighbours();
             node.listenToPort(node.getPort());
         }
@@ -315,5 +311,4 @@ public class Node
             System.out.println("Nachbar " + this.neighbourNodes[i]);
         }
     }
-
 }
