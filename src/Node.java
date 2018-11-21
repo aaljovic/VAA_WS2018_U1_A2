@@ -16,7 +16,8 @@ public class Node
         if (args.length == 1)
         {
             Node node = read(args[0]);
-            node.setRandomNeighbours();
+            node.setNeighbours(readForNeighbours(Integer.toString(node.id)));
+            //node.setRandomNeighbours();
             node.showNeighbours();
             node.listenToPort(node.getPort());
         }
@@ -25,8 +26,6 @@ public class Node
             System.out.println("Ungültige Eingabe." + "\n" + "Starten Sie das Programm neu mit der gewünschten Knoten ID.");
         }
     }
-
-    static final int LENGTH_NODE_ARRAY = 1000;
 
     private int id;
     private String ipAddress;
@@ -41,6 +40,60 @@ public class Node
         this.neighbourNodes = neighbourNodes;
     }
 
+    protected static int[] readForNeighbours(String inputParameter)
+    {
+        String line = "";
+        String idInLine = "LEER";
+        String lastWordInLine = "";
+        String lastIdInLine = "";
+        int[] neighbours = new int[Constants.LENGTH_NODE_ARRAY];
+        int numberOfNeighbours = 0;
+
+        try {
+            FileReader fr = new FileReader(Constants.GRAPH_FILE_NAME);
+            BufferedReader br = new BufferedReader(fr);
+
+            while (((line = br.readLine()) != null) && (!line.equals("}")))
+            {
+                idInLine = line.substring(0, line.indexOf(" "));
+                lastWordInLine = line.substring(line.lastIndexOf(" ")+1);
+                lastIdInLine = lastWordInLine.substring(0, (lastWordInLine.length()-1));
+                if (idInLine.equals(inputParameter))
+                {
+                    neighbours[numberOfNeighbours] = Integer.parseInt(lastIdInLine);
+                    System.out.println(numberOfNeighbours + ". Nachbar " + neighbours[numberOfNeighbours]);
+                    numberOfNeighbours++;
+                }
+                else if (lastIdInLine.equals(inputParameter))
+                {
+                    neighbours[numberOfNeighbours] = Integer.parseInt(idInLine);
+                    System.out.println(numberOfNeighbours + ". Nachbar " + neighbours[numberOfNeighbours]);
+                    numberOfNeighbours++;
+                }
+            }
+        }
+        catch (FileNotFoundException fnfe)
+        {
+            System.err.println(Constants.FILE_NOT_FOUND_ERROR + fnfe);
+        }
+        catch (IOException ioe)
+        {
+            System.err.println(Constants.INPUT_OUTPUT_ERROR + ioe);
+        }
+        catch (NullPointerException npe)
+        {
+            System.err.println("Die Eingegebene Nachbar-ID existiert nicht. Nullpointer Exception: " + npe);
+        }
+
+        int[] compactNeighbours = new int[numberOfNeighbours];
+        for (int j=0; j<numberOfNeighbours; j++)
+        {
+            compactNeighbours[j] = neighbours[j];
+        }
+
+        return compactNeighbours;
+    }
+
     protected static Node read(String inputParameter)
     {
         String line = "";
@@ -48,7 +101,7 @@ public class Node
         String ipAddress = "";
 
         try {
-            FileReader fr = new FileReader(Constants.FILE_NAME);
+            FileReader fr = new FileReader(Constants.TEXT_FILE_NAME);
             BufferedReader br = new BufferedReader(fr);
 
             //Search in the File for the matching line (ID) with the user's input.
@@ -80,11 +133,11 @@ public class Node
     {
         String line = "";
         String idInLine = "";
-        int[] idAllLines = new int[LENGTH_NODE_ARRAY];
+        int[] idAllLines = new int[Constants.LENGTH_NODE_ARRAY];
         int numberOfId = 0;
 
         try {
-            FileReader fr = new FileReader(Constants.FILE_NAME);
+            FileReader fr = new FileReader(Constants.TEXT_FILE_NAME);
             BufferedReader br = new BufferedReader(fr);
 
             while ((line = br.readLine()) != null)
@@ -109,6 +162,11 @@ public class Node
     protected int getPort()
     {
         return this.port;
+    }
+
+    protected void setNeighbours(int[] neighbours)
+    {
+        this.neighbourNodes = neighbours;
     }
 
     protected String getIpAddress() { return this.ipAddress; }
@@ -204,7 +262,7 @@ public class Node
     {
         String line = "";
         String idInLine = "";
-        int[] idAllLines = new int[LENGTH_NODE_ARRAY];
+        int[] idAllLines = new int[Constants.LENGTH_NODE_ARRAY];
         int[] randomNeighbours = new int[3];
         int numberOfId = 0;
         int randomIndex = 0;
@@ -212,7 +270,7 @@ public class Node
         List<Integer> assignedNodes = new ArrayList<>();
 
         try {
-            FileReader fr = new FileReader(Constants.FILE_NAME);
+            FileReader fr = new FileReader(Constants.TEXT_FILE_NAME);
             BufferedReader br = new BufferedReader(fr);
 
             while ((line = br.readLine()) != null)

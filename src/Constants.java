@@ -6,8 +6,10 @@ public final class Constants
     }
 
     // Source Code Variables
+    static final int LENGTH_NODE_ARRAY = 1000;
     public static final String STOP_MESSAGE = "stop";
-    public static final String FILE_NAME = "D:\\GitHubProjekte\\VAA2018\\inputFiles\\inputTextFile";
+    public static final String TEXT_FILE_NAME = "D:\\GitHubProjekte\\VAA_WS2018_U1_A2\\inputFiles\\inputTextFile";
+    public static final String GRAPH_FILE_NAME = "D:\\GitHubProjekte\\VAA_WS2018_U1_A2\\inputFiles\\inputGraphFile";
 
     // Error Messages
     public static final String FILE_NOT_FOUND_ERROR = "Datei nicht gefunden ";
